@@ -36,6 +36,7 @@ const userController = {
         try {
             const { email, password } = req.body;
             const user = await User.findOne({ email });
+            const JWT_SECRET = config.JWT_SECRET
 
             if (!user) {
                 return res.status(401).json({ message: "Unauthorized User" });
@@ -47,7 +48,7 @@ const userController = {
                 return res.status(401).json({ message: "Invalid email or password" });
             }
 
-            const token = jwt.sign({ userId: user._id }, config.JWT_SECRET);
+            const token = jwt.sign({ userId: user._id }, JWT_SECRET);
             res.cookie('token', token, {
                 httpOnly: true,
                 secure: true,
