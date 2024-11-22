@@ -4,7 +4,7 @@ const bookController = require('../controller/bookController');
 const auth = require('../auth');
 
 bookRouter.get('/getAllBooks', auth.isAuth, bookController.getAllBooks);
-bookRouter.get('/getRentedBooks', auth.isAuth,auth.isAdmin, bookController.getAllRentedBooks);
+bookRouter.get('/getRentedBooks', auth.isAuth, bookController.getRentedBooks);
 bookRouter.get('/getBook/:bookId', auth.isAuth, bookController.getBookById);
 bookRouter.post('/createBook', auth.isAuth, auth.isAdmin, bookController.createBook);
 bookRouter.delete('/deleteBook/:bookId', auth.isAuth, auth.isAdmin, bookController.deleteBook);

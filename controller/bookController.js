@@ -130,14 +130,15 @@ const bookController = {
         }
     },
 
-    getAllRentedBooks : async(req, res) => {
+    getRentedBooks : async(req, res) => {
         try {
-            const userId = req.userId
-            const user = await User.findById(userId);
-            const rentedBooks = await Book.find({rentedBy : userId});
-            res.status(200).json({rentedBooks});
+            const user = await User.findById(req.userId).populate('rentedBooks');
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+              }
+            res.status(200).json({rentedBooks : user.rentedBooks});
         } catch (error) {
-            console.error('Error in getAllRentedBooks:', error);
+            console.log('Error in getRentedBooks:', error);
             res.status(500).json({ message: error.message });
         }
     },
