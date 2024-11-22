@@ -143,18 +143,15 @@ const bookController = {
         }
     },
 
-    booksRentedByAllUsers : async(req, res) => {
+    booksRentedByAllUsers : async (req, res) => {
         try {
-            const Books = await Book.find();
-            const users = await User.find();
-            const allRentedBooks = await Book.find({rentedBy : {$in : users.map((user) => user._id)}});
-
-            res.status(200).json({allRentedBooks});
+          const allRentedBooks = await Book.find({ isRented: true }).populate('rentedBy', 'userName phoneNumber');
+          res.status(200).json({ allRentedBooks });
         } catch (error) {
-            console.error('Error in booksRentedByAllUsers:', error);
-            res.status(500).json({ message: error.message });
+          console.error('Error in booksRentedByAllUsers:', error);
+          res.status(500).json({ message: error.message });
         }
-    }
+      }
 }
 
 module.exports = bookController;
