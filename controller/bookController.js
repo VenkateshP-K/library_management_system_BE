@@ -48,43 +48,39 @@ const bookController = {
         }
     },
 
-    rentBook : async(req, res) => {
+    rentBook : async (req, res) => {
         try {
-            const bookId = req.params.bookId
-            const userId = req.userId
-
-            const book = await Book.findById(bookId);
-
-            if(!Book){
-                return res.status(404).json({message : "Book not found"});
-            }
-
-            if(Book.isRented === true) {
-                return res.status(400).json({message : "Book is already rented"});
-            }
-
-            const updateBook = await Book.findByIdAndUpdate(
-                bookId,
-                {isRented : true},
-                {new : true}
-            )
-
-            await Book.findByIdAndUpdate(
-                bookId,
-                {$push : {rentedBy : userId}}
-            )
-
-            await User.findByIdAndUpdate(
-                userId,
-                {$push : {rentedBooks : bookId}}
-            )
-
-            res.status(200).json({message : "Book rented successfully", updateBook});
+          const bookId = req.params.bookId;
+          const userId = req.userId;
+      
+          // Find the book
+          const book = await Book.findById(bookId);
+      
+          if (!book) {
+            return res.status(404).json({ message: "Book not found" });
+          }
+      
+          // Check if the book is already rented
+          if (book.isRented) {
+            return res.status(400).json({ message: "Book is already rented" });
+          }
+      
+          // Mark the book as rented
+          book.isRented = true;
+          book.rentedBy = userId; // Add user to the rentedBy field
+          await book.save();
+      
+          // Add the book to the user's rentedBooks array
+          await User.findByIdAndUpdate(userId, {
+            $push: { rentedBooks: bookId },
+          });
+      
+          res.status(200).json({ message: "Book rented successfully", book });
         } catch (error) {
-            console.error('Error in rentBook:', error);
-            res.status(500).json({ message: error.message });
+          console.error("Error in rentBook:", error);
+          res.status(500).json({ message: error.message });
         }
-    },
+      };
 
     returnBook : async(req, res) => {
         try{
