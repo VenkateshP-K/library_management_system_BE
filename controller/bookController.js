@@ -80,7 +80,7 @@ const bookController = {
           console.error("Error in rentBook:", error);
           res.status(500).json({ message: error.message });
         }
-      };
+      },
 
     returnBook : async(req, res) => {
         try{
