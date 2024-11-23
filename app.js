@@ -13,7 +13,7 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 
 const corsOptions = {
-    origin: ['http://localhost:5173', 'https://library-management-system-be.onrender.com'],
+    origin: ['https://tourmaline-platypus-1b5b88.netlify.app/','http://localhost:5173', 'https://library-management-system-be.onrender.com'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
